@@ -1,6 +1,19 @@
-# PiHomeLab
+# Table of Contents
+- [Raspberry Pi Config](#raspberry-pi-config)
+- [Kubernetes](#kubernetes)
+  * [K3s](#k3s)
+  * [Kubernetes Dashboard](#kubernetes-dashboard)
+  * [Prometheus](#prometheus)
+    + [KubeStateMetrics](#kubestatemetrics)
+  * [Grafana](#grafana)
+- [Docker](#docker)
+  * [Docker Compose](#docker-compose)
+  * [Pi-Hole](#pi-hole)
+  * [Portainer](#portainer)
+  * [Plex](#plex)
 
-This will contain all services running on the Raspberry Pi at home.
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'></a></i></small>
+
 
 ## Raspberry Pi Config
 
@@ -32,6 +45,12 @@ sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 ```console
 systemctl status k3s.service
 k3s kubectl cluster-info
+```
+
+### Helm
+
+```console
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 ```
 
 ### Kubernetes Dashboard
@@ -533,6 +552,105 @@ spec:
 ```console
 kubectl create -f grafana-service.yaml
 ```
+
+#### NodeExporter
+
+```console
+mkdir ~/monitoring/NodeExporter
+cd ~/monitoring/NodeExporter
+```
+
+```console
+nano daemonset.yaml
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/name: node-exporter
+  name: node-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: exporter
+      app.kubernetes.io/name: node-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: exporter
+        app.kubernetes.io/name: node-exporter
+    spec:
+      containers:
+      - args:
+        - --path.sysfs=/host/sys
+        - --path.rootfs=/host/root
+        - --no-collector.wifi
+        - --no-collector.hwmon
+        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+        - --collector.netclass.ignored-devices=^(veth.*)$
+        name: node-exporter
+        image: prom/node-exporter
+        ports:
+          - containerPort: 9100
+            protocol: TCP
+        resources:
+          limits:
+            cpu: 250m
+            memory: 180Mi
+          requests:
+            cpu: 102m
+            memory: 180Mi
+        volumeMounts:
+        - mountPath: /host/sys
+          mountPropagation: HostToContainer
+          name: sys
+          readOnly: true
+        - mountPath: /host/root
+          mountPropagation: HostToContainer
+          name: root
+          readOnly: true
+      volumes:
+      - hostPath:
+          path: /sys
+        name: sys
+      - hostPath:
+          path: /
+        name: root
+```
+
+```console
+kubectl create -f daemonset.yaml
+```
+
+```console
+nano service.yaml
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: node-exporter
+  namespace: monitoring
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port:   '9100'
+spec:
+  selector:
+      app.kubernetes.io/component: exporter
+      app.kubernetes.io/name: node-exporter
+  ports:
+  - name: node-exporter
+    protocol: TCP
+    port: 9100
+    targetPort: 9100
+```
+
+```console
+kubectl create -f service.yaml
+```
+
 
 ## Docker
 
