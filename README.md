@@ -2,10 +2,12 @@
 - [Raspberry Pi Config](#raspberry-pi-config)
 - [Kubernetes](#kubernetes)
   * [K3s](#k3s)
+  * [Helm](#helm)
   * [Kubernetes Dashboard](#kubernetes-dashboard)
   * [Prometheus](#prometheus)
     + [KubeStateMetrics](#kubestatemetrics)
   * [Grafana](#grafana)
+    + [NodeExporter](#nodeexporter)
 - [Docker](#docker)
   * [Docker Compose](#docker-compose)
   * [Pi-Hole](#pi-hole)
@@ -13,7 +15,6 @@
   * [Plex](#plex)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'></a></i></small>
-
 
 ## Raspberry Pi Config
 
