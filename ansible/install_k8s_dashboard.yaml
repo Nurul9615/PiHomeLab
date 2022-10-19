@@ -1,0 +1,22 @@
+---
+- hosts: all
+  tasks:
+
+    - name: install pre-requisites
+      pip:
+        name:
+          - openshift
+          - pyyaml
+          - kubernetes
+
+    - name: Deploy Admin-User-Role
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        definition: "{{ lookup('file', 'k8s_dashboard/dashboard.admin-user-role.yml') | from_yaml }}"
+
+    - name: Deploy Admin-User
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        definition: "{{ lookup('file', 'k8s_dashboard/dashboard.admin-user.yml') | from_yaml }}"

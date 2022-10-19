@@ -1,0 +1,22 @@
+---
+- hosts: all
+  tasks:
+
+    # - name: Copy files
+    #   ansible.builtin.copy:
+    #     src: "{{ item }}"
+    #     dest: ~/kubeStateMetrics/
+    #     owner: pi
+    #     group: pi
+    #     mode: '0644'
+    #     follow: yes
+    #   with_fileglob:
+    #     - kubeStateMetrics/*.yaml
+    
+    - name: Deploy KubeStateMetrics
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "./kubeStateMetrics/*.yaml"
