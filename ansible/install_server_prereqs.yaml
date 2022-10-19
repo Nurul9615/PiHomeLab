@@ -1,0 +1,45 @@
+---
+- hosts: all
+  tasks:
+      
+    - name: Install Docker
+      ansible.builtin.shell:
+        cmd: |
+          curl -sSL https://get.docker.com | sh
+          sudo usermod -aG docker pi
+          sudo apt install docker-compose
+        chdir: ~/
+
+    - name: Install git
+      ansible.builtin.shell:
+        cmd: |
+          sudo apt install git
+        chdir: ~/
+
+    - name: Flush IP Tables
+      ansible.builtin.shell:
+        cmd: |
+          sudo iptables -F
+        chdir: ~/
+
+    - name: Reboot machine
+      reboot: 
+
+    - name: Install k3s
+      ansible.builtin.shell:
+        cmd: |
+          sudo curl -sfL https://get.k3s.io | sh -s - -write-kubeconfig-mode 644
+          sudo chmod 755 /etc/rancher/k3s/k3s.yaml
+          sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+        chdir: ~/
+
+    - name: Check k3s Status
+      ansible.builtin.command: systemctl status k3s.service
+      register: output
+    - debug: var=output.stdout_lines
+
+    - name: Install Helm
+      ansible.builtin.shell:
+        cmd: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        chdir: ~/

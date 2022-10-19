@@ -2,12 +2,25 @@
 - hosts: all
   tasks:
 
-    - name: install pre-requisites
+    - name: Install pre-requisites
       pip:
         name:
           - openshift
           - pyyaml
           - kubernetes
+      
+    # - name: Pull git repo for dashboard
+    #   ansible.builtin.shell:
+    #     cmd: |
+    #       GITHUB_URL=https://github.com/kubernetes/dashboard/releases
+    #       VERSION_KUBE_DASHBOARD=$(curl -w '%{url_effective}' -I -L -s -S ${GITHUB_URL}/latest -o /dev/null | sed -e 's|.*/||')
+    #       sudo k3s kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/${VERSION_KUBE_DASHBOARD}/aio/deploy/recommended.yaml
+    #     chdir: ~/
+
+    - name: Find k8s Dashboard Port
+      ansible.builtin.command: sudo k3s kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+      register: output
+    - debug: var=output.stdout_lines
 
     - name: Deploy Admin-User-Role
       kubernetes.core.k8s:
