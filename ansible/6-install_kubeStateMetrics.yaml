@@ -19,4 +19,4 @@
         state: present
         definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
       with_fileglob:
-        - "./kubeStateMetrics/*.yaml"
+        - "kubeStateMetrics/*.yaml"
