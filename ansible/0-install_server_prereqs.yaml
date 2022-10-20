@@ -35,7 +35,7 @@
       become: true
       ansible.builtin.shell:
         cmd: |
-          sudo curl -sfL https://get.k3s.io | sh -s - -write-kubeconfig-mode 644
+          sudo curl -sfL https://get.k3s.io | sh -s - -write-kubeconfig-mode 644 INSTALL_K3S_EXEC="server --disable=traefik"
           sudo chmod 755 /etc/rancher/k3s/k3s.yaml
           mkdir ~/.kube
           sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
