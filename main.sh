@@ -24,15 +24,9 @@ main () {
 
     # prereqs
 
-    ansible-playbook ansible/1-install_portainer.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/2-install_plex.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/3-install_pihole.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/4-install_k8s_dashboard.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/5-install_prometheus.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/6-install_kubeStateMetrics.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/7-install_nodeExporter.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/8-install_grafana.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/9-install_loki.yaml -i ~/ansible -u pi
+    # ansible-playbook ansible/1-install_docker_apps.yaml -i ~/ansible -u pi
+    # ansible-playbook ansible/2-install_k8s_dashboard.yaml -i ~/ansible -u pi
+    # ansible-playbook ansible/2-install_monitoring.yaml -i ~/ansible -u pi
 }
 
 main

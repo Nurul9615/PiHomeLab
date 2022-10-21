@@ -1,0 +1,65 @@
+---
+- hosts: all
+  tasks:
+
+    - name: Create a k8s namespace
+      kubernetes.core.k8s:
+        name: monitoring
+        api_version: v1
+        kind: Namespace
+        state: present  
+
+    - name: Deploy Prometheus
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "prometheus/clusterRole.yaml"
+        - "prometheus/clusterRole-binding.yaml"
+        - "prometheus/config-map.yaml"
+        - "prometheus/prometheus-deployment.yaml"
+        - "prometheus/prometheus-service.yaml"
+
+    - name: Nginx Helm Install
+      become: true
+      ansible.builtin.shell:
+        cmd: |
+          helm install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace monitoring --set controller.metrics.enabled=true --set-string controller.podAnnotations."prometheus\.io/scrape"="true" --set-string controller.podAnnotations."prometheus\.io/port"="10254"
+        chdir: ~/
+
+    - name: Deploy KubeStateMetrics
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "kubeStateMetrics/*.yaml"
+
+    - name: Deploy NodeExporter
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "./nodeExporter/daemonset.yaml"
+        - "./nodeExporter/nodeExporter-service.yaml"
+
+    - name: Deploy Grafana
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "./grafana/grafana-datasource-config.yaml"
+        - "./grafana/grafana-deployment.yaml"
+        - "./grafana/grafana-service.yaml"
+
+    - name: Install Loki
+      become: true
+      ansible.builtin.shell:
+        cmd: |
+          helm repo add loki https://grafana.github.io/loki/charts
+          helm repo update
+          helm upgrade --install loki --namespace=monitoring loki/loki-stack
+        chdir: ~/

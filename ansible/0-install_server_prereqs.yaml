@@ -39,6 +39,7 @@
           sudo chmod 755 /etc/rancher/k3s/k3s.yaml
           mkdir ~/.kube
           sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+          sudo chmod ~/.kube/config
         chdir: ~/
 
     - name: Check k3s Status
