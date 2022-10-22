@@ -27,6 +27,7 @@
         cmd: |
           helm install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace monitoring --set controller.metrics.enabled=true --set-string controller.podAnnotations."prometheus\.io/scrape"="true" --set-string controller.podAnnotations."prometheus\.io/port"="10254"
         chdir: ~/
+      ignore_errors: yes
 
     - name: Deploy KubeStateMetrics
       kubernetes.core.k8s:

@@ -21,8 +21,6 @@
           - /path/to/library:/config
           - /path/to/tvseries:/tv
           - /path/to/movies:/movies
-        # ports:
-        #   - "32400:32400"
         restart_policy: unless-stopped
         network_mode: host
         env:
@@ -34,6 +32,10 @@
       community.docker.docker_container:
         name: pihole
         image: pihole/pihole:latest
+        state: started
+        dns_servers:
+          - 127.0.0.1
+          - 8.8.4.4
         volumes:
           - './etc-pihole:/etc/pihole'
           - './etc-dnsmasq.d:/etc/dnsmasq.d'
@@ -45,3 +47,9 @@
         env:
           TZ: "Europe/London"
           WEBPASSWORD: 'password123'
+
+    - name: Remove old image versions
+      docker_prune:
+        images: yes
+        images_filters:
+          dangling: false

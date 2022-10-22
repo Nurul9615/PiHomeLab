@@ -5,7 +5,7 @@ prereqs () {
 
 #     if [[ ]]; then
 #         env
-#     elif [[]]; then
+#     elif [[ ]]; then
 #         ene
 #     fi
 }
@@ -22,11 +22,11 @@ main () {
     eval `ssh-agent`
     ssh-add /home/nurul/.ssh/ansible
 
-    # prereqs
+    prereqs
 
-    # ansible-playbook ansible/1-install_docker_apps.yaml -i ~/ansible -u pi
-    # ansible-playbook ansible/2-install_k8s_dashboard.yaml -i ~/ansible -u pi
-    # ansible-playbook ansible/2-install_monitoring.yaml -i ~/ansible -u pi
+    ansible-playbook ansible/1-install_docker_apps.yaml -i ~/ansible -u pi
+    ansible-playbook ansible/2-install_k8s_dashboard.yaml -i ~/ansible -u pi
+    ansible-playbook ansible/3-install_monitoring.yaml -i ~/ansible -u pi
 }
 
 main

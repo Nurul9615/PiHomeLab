@@ -21,25 +21,36 @@
         name: git
         state: present
 
-    - name: Flush IP Tables
-      ansible.builtin.shell:
-        cmd: |
-          sudo iptables -F
-        chdir: ~/
+    # - name: Flush IP Tables
+    #   ansible.builtin.shell:
+    #     cmd: |
+    #       sudo iptables -F
+    #     chdir: ~/
 
-    - name: Reboot machine
-      become: true
-      reboot: 
+    # - name: Reboot machine
+    #   become: true
+    #   reboot: 
+
+    # - name: Install k3s Pre-requisites
+    #   become: true
+    #   ansible.builtin.shell:
+    #     cmd: |
+    #       #echo " cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory" | sudo tee -a /boot/cmdline.txt
+    #     chdir: ~/
+
+    # - name: Reboot machine
+    #   become: true
+    #   reboot: 
 
     - name: Install k3s
       become: true
       ansible.builtin.shell:
         cmd: |
-          sudo curl -sfL https://get.k3s.io | sh -s - -write-kubeconfig-mode 644 INSTALL_K3S_EXEC="server --disable=traefik"
+          sudo curl -sfL https://get.k3s.io | sh -s - -write-kubeconfig-mode 644
           sudo chmod 755 /etc/rancher/k3s/k3s.yaml
           mkdir ~/.kube
           sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-          sudo chmod ~/.kube/config
+          sudo chmod 755 ~/.kube/config
         chdir: ~/
 
     - name: Check k3s Status
@@ -52,3 +63,12 @@
         cmd: |
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
         chdir: ~/
+
+    - name: Disable Traefik
+      become: true
+      ansible.builtin.shell:
+        cmd: |
+          helm -n kube-system delete traefik traefik-crd
+          kubectl -n kube-system delete helmchart traefik traefik-crd
+          touch /var/lib/rancher/k3s/server/manifests/traefik.yaml.skip
+          systemctl restart k3s
