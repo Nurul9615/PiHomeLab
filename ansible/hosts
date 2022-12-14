@@ -1,5 +1,5 @@
 [Servers]
-rpi ansible_host=192.168.0.19
+rpi ansible_host=192.168.0.10
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3

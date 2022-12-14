@@ -10,6 +10,7 @@
 | ------------- | ------------- |
 | Docker        | 10010  |
 | Docker Compose| N/A  |
+| Heimdall      | 8090  |
 | Git           | N/A  |
 | K3S           | 6443  |
 | Helm          | N/A  |
@@ -23,6 +24,7 @@
 | Grafana     | 32000  |
 | Loki     | :3100/:3101/metrics  |
 | Nginx Ingress      | 80/443  |
+| Transmission     | 9091  |
 
 
 ## Kubernetes Dashboard

@@ -31,16 +31,16 @@
     #   become: true
     #   reboot: 
 
-    # - name: Install k3s Pre-requisites
-    #   become: true
-    #   ansible.builtin.shell:
-    #     cmd: |
-    #       #echo " cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory" | sudo tee -a /boot/cmdline.txt
-    #     chdir: ~/
+    - name: Install k3s Pre-requisites
+      become: true
+      ansible.builtin.shell:
+        cmd: |
+          echo " cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory" | sudo tee -a /boot/cmdline.txt
+        chdir: ~/
 
-    # - name: Reboot machine
-    #   become: true
-    #   reboot: 
+    - name: Reboot machine
+      become: true
+      reboot: 
 
     - name: Install k3s
       become: true

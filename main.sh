@@ -18,15 +18,15 @@ create_ssh_key () {
 
 main () {
     create_ssh_key "/home/nurul/.ssh/ansible"
-    ssh-copy-id -i /home/nurul/.ssh/ansible.pub pi@192.168.0.19
+    ssh-copy-id -i /home/nurul/.ssh/ansible.pub pi@192.168.0.10
     eval `ssh-agent`
     ssh-add /home/nurul/.ssh/ansible
 
-    prereqs
+    # prereqs
 
-    ansible-playbook ansible/1-install_docker_apps.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/2-install_k8s_dashboard.yaml -i ~/ansible -u pi
-    ansible-playbook ansible/3-install_monitoring.yaml -i ~/ansible -u pi
+    # ansible-playbook ansible/1-install_docker_apps.yaml -i ~/ansible -u pi
+    # ansible-playbook ansible/2-install_k8s_dashboard.yaml -i ~/ansible -u pi
+    # ansible-playbook ansible/3-install_monitoring.yaml -i ~/ansible -u pi
 }
 
 main
