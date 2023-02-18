@@ -1,6 +1,12 @@
 name: GitHub Actions Demo
+
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -16,3 +22,18 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  # sonarqube:
+  #   name: SonarQube Trigger
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checking out
+  #     uses: actions/checkout@main
+  #     with:
+  #       # Disabling shallow clone is recommended for improving relevancy of reporting
+  #       fetch-depth: 0
+  #   - name: SonarQube Scan
+  #     uses: kitabisa/sonarqube-action@v1.2.0
+  #     with:
+  #       host: ${{ secrets.SONARQUBE_HOST }}
+  #       login: ${{ secrets.SONARQUBE_TOKEN }}
