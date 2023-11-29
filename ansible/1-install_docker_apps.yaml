@@ -1,7 +1,6 @@
 ---
 - hosts: all
   tasks:
-
     - name: Deploy Portainer
       community.docker.docker_container:
         name: portainer
@@ -35,8 +34,8 @@
           - 127.0.0.1
           - 8.8.4.4
         volumes:
-          - './etc-pihole:/etc/pihole'
-          - './etc-dnsmasq.d:/etc/dnsmasq.d'
+          - "./etc-pihole:/etc/pihole"
+          - "./etc-dnsmasq.d:/etc/dnsmasq.d"
         ports:
           - "54:54/tcp"
           - "54:54/udp"
@@ -44,7 +43,7 @@
         restart_policy: unless-stopped
         env:
           TZ: "Europe/London"
-          WEBPASSWORD: 'password123'
+          WEBPASSWORD: "password123"
 
     - name: Remove old image versions
       docker_prune:
@@ -65,7 +64,7 @@
         image: lscr.io/linuxserver/heimdall:latest
         state: started
         volumes:
-          - '/home/pi/heimdall/config:/config'
+          - "/home/pi/heimdall/config:/config"
         ports:
           - "8090:80"
           - "8100: 443"
@@ -81,7 +80,7 @@
         image: lscr.io/linuxserver/transmission:latest
         state: started
         volumes:
-          - '/home/pi/transmission/config:/config'
+          - "/home/pi/transmission/config:/config"
         ports:
           - "9091:9091"
           - "51413:51413"

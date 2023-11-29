@@ -1,7 +1,6 @@
 ---
 - hosts: all
   tasks:
-
     - name: Install pip
       ansible.builtin.shell:
         cmd: |
@@ -15,7 +14,7 @@
           - openshift
           - pyyaml
           - kubernetes
-      
+
     - name: Pull git repo for dashboard
       become: true
       ansible.builtin.shell:

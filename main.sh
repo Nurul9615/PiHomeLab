@@ -1,7 +1,7 @@
 #!/bin/bash
 
 prereqs() {
-     ansible-playbook ansible/0-install_server_prereqs.yaml -i ~/ansible -u pi
+    ansible-playbook ansible/0-install_server_prereqs.yaml -i ~/ansible -u pi
 }
 
 create_ssh_key() {
@@ -13,7 +13,7 @@ create_ssh_key() {
 main() {
     create_ssh_key "/home/nurul/.ssh/ansible"
     ssh-copy-id -i /home/nurul/.ssh/ansible.pub pi@192.168.0.10
-    eval `ssh-agent`
+    eval $(ssh-agent)
     ssh-add /home/nurul/.ssh/ansible
 
     # prereqs
@@ -24,4 +24,3 @@ main() {
 }
 
 main
-

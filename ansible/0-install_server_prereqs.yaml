@@ -1,7 +1,6 @@
 ---
 - hosts: all
   tasks:
-      
     - name: Install Docker
       ansible.builtin.shell:
         cmd: |
@@ -29,7 +28,7 @@
 
     # - name: Reboot machine
     #   become: true
-    #   reboot: 
+    #   reboot:
 
     - name: Install k3s Pre-requisites
       become: true
@@ -40,7 +39,7 @@
 
     - name: Reboot machine
       become: true
-      reboot: 
+      reboot:
 
     - name: Install k3s
       become: true
