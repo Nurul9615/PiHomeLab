@@ -10,11 +10,11 @@
         # server: my-docker # The docker server that was configured
         # container: portainer
 
-- Personal:
-    - Nextcloud:
-        icon: nextcloud.png
-        href: "https://nextcloud.nurul.online"
-        description: Storage and Backups
+#- Personal:
+#    - Nextcloud:
+#        icon: nextcloud.png
+#        href: "https://nextcloud.nurul.online"
+#        description: Storage and Backups
 
 - Monitoring:
     - Grafana:

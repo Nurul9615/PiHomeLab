@@ -9,12 +9,10 @@
 | -------------------- | ------------------- |
 | Docker               | 10010               |
 | Docker Compose       | N/A                 |
-| Heimdall             | 8090                |
 | Git                  | N/A                 |
-| K3S                  | 6443                |
+| k3s                  | 6443                |
 | Helm                 | N/A                 |
 | Portainer            | 9000                |
-| Plex                 | 32400               |
 | Pi-Hole              | 5335                |
 | Kubernetes Dashboard | 30232               |
 | Prometheus           | 30000               |
@@ -23,7 +21,6 @@
 | Grafana              | 32000               |
 | Loki                 | :3100/:3101/metrics |
 | Nginx Ingress        | 80/443              |
-| Transmission         | 9091                |
 
 ## Kubernetes Dashboard
 
